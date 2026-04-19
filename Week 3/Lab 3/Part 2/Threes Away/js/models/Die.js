@@ -1,3 +1,13 @@
+/* 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Code base provided by Brian Bird 
+modified by Zoey McKee, 4/19/2026
+No AI tools were used in the creation 
+of this project except for researching 
+how certain functions work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 export class Die{
 
     #value
@@ -24,6 +34,7 @@ export class Die{
     setLockedIn(input){ this.#lockedIn = input }
     setIsTriple(input){ this.#isTriple = input }
 
+    //changes die value to random number between 1-3, sets isLockedIn flag if die is held at end of turn
     roll(){
 
         if(!this.getIsHeld()){
@@ -38,6 +49,7 @@ export class Die{
 
     }
 
+    //If die isn't Locked In, toggles isHeld boolean
     toggleHold() {
         if(!this.getLockedIn()){ 
             this.setIsHeld(!this.getIsHeld()); 
@@ -45,10 +57,13 @@ export class Die{
 
     }
 
+    //Changes isHeld to true
     hold() { this.setIsHeld(true) }
 
+    //Changes isLockedIn to true
     lockIn(){ this.setLockedIn(true) }
 
+    //Resets die state
     reset() {
         this.setIsHeld(false);
         this.setLockedIn(false);

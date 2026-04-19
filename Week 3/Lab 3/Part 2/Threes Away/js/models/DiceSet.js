@@ -1,3 +1,13 @@
+/* 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Code base provided by Brian Bird 
+modified by Zoey McKee, 4/19/2026
+No AI tools were used in the creation 
+of this project except for researching 
+how certain functions work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 import {Die} from './Die.js'
 
 export class DiceSet{
@@ -16,44 +26,66 @@ export class DiceSet{
     getDice(){ return this.#dice }
     setDice(input){ this.#dice = input}
 
+    //Rolls all the dice, checks for triples
     rollAll(){
-        this.checkForTriples();
+
         for(const die of this.getDice()){
             die.roll()         
         }    
+        this.checkForTriples();
 
     }
 
+    //Iterates through dice list, marking how many dice of the same value it found
     checkNumberofDuplicateValues(input){
         let buffer = 0;
+        console.log(this.getDice())
         for(const die of this.getDice()){
+            console.log(die)
             if(die.getValue() === input){ buffer +=1 } 
 
         }
-        //console.log(`Woww BufferTime: ${buffer}`)
+        console.log(`Input: ${input} Found: ${buffer}`)
         return buffer
     }
 
+    //If it was found that it has 3 or more duplicates, sets isTriple flag on die
     setTriples(){
         //console.log(this.getDice())
         for(const die of this.getDice()){
-            if(this.checkNumberofDuplicateValues(die.getValue()) >= 3 ){ die.setIsTriple(true) }
-            else{ die.setIsTriple(false) }
+            if(Number(this.checkNumberofDuplicateValues(die.getValue())) >= 3 ){  
+                die.setIsTriple(true) 
+            }
+            else{ 
+                die.setIsTriple(false)
+            }
 
         }
     }
 
+    //Goes through list to check if any dice have isTriple flag
     checkForTriples(){
+        this.setTriples()
+        let buffer= false
         for(const die of this.getDice()){
-            if(die.getIsTriple()){ return true; }
-            else{ return false; }
+
+            if(die.getIsTriple() === true){
+                //console.log(`Value: ${die.getValue()} Triple detected!!!`)
+                buffer = true; 
+            }
+            else{ 
+                //console.log(`Value: ${die.getValue()} Triple not detected.`)
+                buffer =  false; 
+            }
 
         }
 
+        return buffer
     }
 
+    //Returns player score
     getCurrentScore() {
-        // A player only scores points if they have acquired the 6, 5, and 4.
+        // Adds die face values to score unless die value = 3
         let totalScore = 0;
         for (const die of this.getDice()) {
             //console.log(`Search Value: ${die.getValue()} Returns: ${this.checkForTriples(die.getValue())}`)
@@ -62,7 +94,8 @@ export class DiceSet{
             }            
         }
 
-        this.setTriples()
+        //console.log(`Is there a triple? ${this.checkForTriples()}`)
+        //Checks for triples
         if(this.checkForTriples()){
             totalScore += 10;
         }
@@ -70,6 +103,7 @@ export class DiceSet{
         return totalScore; 
     }
 
+    //Test function used to print die list
     printDice() {
         let buffer = ""
         for (const die of this.getDice()) {
@@ -79,21 +113,24 @@ export class DiceSet{
         return buffer;
     }
 
-
+    //Returns whether or not die can be held, left over function from source code.
     canHold(die){
         return true;
     }
 
+    //Returns whether or not die has isLockedIn flag
     canUnhold(die) {
         return !die.getLockedIn()
     }
 
+    //Resets all Dice
     reset() {
         for (const die of this.getDice()) {
             die.reset();
         }
     }
 
+    //Returns how many dice the player is holding
     getHeldCount(){
         let count = 0;
         for (const die of this.getDice()) {
@@ -104,7 +141,7 @@ export class DiceSet{
         return count
     }
 
-    //returns whether or not all of the dice in the dice list are held
+    //Returns whether or not all of the dice in the dice list are held
     areAllHeld(){
 
         for (const die of this.getDice()) {

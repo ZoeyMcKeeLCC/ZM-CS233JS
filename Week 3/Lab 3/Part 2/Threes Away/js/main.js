@@ -1,3 +1,13 @@
+/* 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Code base provided by Brian Bird 
+modified by Zoey McKee, 4/19/2026
+No AI tools were used in the creation 
+of this project except for researching 
+how certain functions work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 import Game from './models/Game.js';
 // Written by Brian Bird, 4/10/2026 with AI assistance from Gemini 3.1 in Antigravity.
 
@@ -72,16 +82,16 @@ function handleRollClick() {
 }
 
 function handleNextTurnClick() {
-    updateDice()
+    
     game.endTurn();
     if (game.getIsGameOver()) {
         showScoreboard();
     } else {
-        updateDice()
+
         renderDice();
         updateUI();
     }
-    updateDice()
+
 }
 
 function handleNewGameClick() {
@@ -176,7 +186,7 @@ function renderDice() {
         
 
         if (die.getIsHeld() && !die.getLockedIn()) {
-            console.log(`DieValue: ${die.getValue()} IsTriple: ${die.getIsTriple()}`)
+            //console.log(`DieValue: ${die.getValue()} IsTriple: ${die.getIsTriple()}`)
             dieEl.classList.add('cargo');
         } 
         else if (die.getLockedIn()) {
@@ -209,7 +219,6 @@ function updateDice(){
     for(let i = 0; i > game.getDiceSet().getDice().length; i ++){
         die = document.getElementById('die'+i)
         die.click()
-
     }
 
 }

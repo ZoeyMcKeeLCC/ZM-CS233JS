@@ -1,3 +1,13 @@
+/* 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Code base provided by Brian Bird 
+modified by Zoey McKee, 4/19/2026
+No AI tools were used in the creation 
+of this project except for researching 
+how certain functions work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 import {DiceSet} from './DiceSet.js';
 import {Player} from './Player.js';
 
@@ -68,12 +78,11 @@ export default class Game{
 
     //returns the current player
     getCurrentPlayer(){
-
         return this.getPlayers()[this.getCurrentPlayerIndex()];
-
     }
 
-        isTurnOver() {
+    //Returns whether or not it's the end of the fifth turn
+    isTurnOver() {
         return this.getDiceSet().areAllHeld() === 5;
     }
 
@@ -87,6 +96,7 @@ export default class Game{
         }
     }
 
+    //Ends player turn and sets score vars, increments current player
     endTurn() {
         // Save score for current player via its setter to respect encapsulation.
         const currentPlayer = this.getCurrentPlayer();
@@ -101,8 +111,8 @@ export default class Game{
         }
     }
 
+    //Returns winners list based on win condition
     getWinners() {
-        console.log(`isGameOver: ${this.getIsGameOver()}`)
         if (!this.getIsGameOver()) return [];
         
         let maxScore = 100;
