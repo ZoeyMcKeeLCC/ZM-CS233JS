@@ -2,7 +2,7 @@ export class Player {
     #name
     #score
 
-    constructor(name) {
+    constructor(name = "UnNamed Player") {
         this.#name = name;
         this.#score = 0;
     }

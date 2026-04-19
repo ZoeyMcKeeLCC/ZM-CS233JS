@@ -58,19 +58,30 @@ function handleStartGame() {
 }
 
 function handleRollClick() {
+    updateUI();
+    if(game.getTurn() <= game.getDiceSet().getHeldCount()){
     game.rollDice();
     renderDice();
     updateUI();
+
+    }
+    else{
+        showMessage("You must hold at least one extra die per turn")
+    }
+
 }
 
 function handleNextTurnClick() {
+    updateDice()
     game.endTurn();
-    if (game.isGameOver) {
+    if (game.getIsGameOver()) {
         showScoreboard();
     } else {
+        updateDice()
         renderDice();
         updateUI();
     }
+    updateDice()
 }
 
 function handleNewGameClick() {
@@ -91,18 +102,21 @@ function showMessage(text) {
 function updateUI() {
     const currentPlayer = game.getCurrentPlayer();
     
-    currentPlayerDisplay.textContent = `${currentPlayer.name}'s Turn`;
-    rollBtn.textContent = `Roll Dice (${game.rollsLeft} left)`;
+    currentPlayerDisplay.textContent = `${currentPlayer.getName()}'s Turn`;
+    rollBtn.textContent = `Roll Dice (Turn ${game.getTurn()})`;
     
     // Manage button visibility cleanly with toggles.
     // The roll button hides when the turn is over (0 rolls left).
     // The next turn button hides BEFORE the first roll (when rolls left is 3).
-    rollBtn.classList.toggle('hidden', game.isTurnOver());
-    nextTurnBtn.classList.toggle('hidden', game.rollsLeft === 3);
+    rollBtn.classList.toggle('hidden', game.getTurn() === 5);
+    rollBtn.classList.toggle('hidden', game.getDiceSet().areAllHeld());
+    
+    nextTurnBtn.classList.toggle('hidden', game.isTurnOver());
+    nextTurnBtn.classList.toggle('hidden', game.getTurn() === 0);
 
     // Dynamic Button text for keeping score
 
-    const cargo = game.diceSet.getCurrentScore();
+    const cargo = game.getDiceSet().getCurrentScore();
     nextTurnBtn.textContent = `Keep Score: ${cargo} & End Turn`;
 
 }
@@ -115,7 +129,7 @@ function renderDice() {
     
     // The player's very first view of the board happens before they roll.
     // Since they always start with 3 rolls, we know they haven't rolled yet.
-    const isFirstRoll = game.rollsLeft === 3;
+    const isFirstRoll = game.getTurn() === 0;
 
     // HTML Decimal codes for dice faces 1-6 (⚀, ⚁, etc.)
     // These specific numbers (9856-9861) act as shortcuts for the browser to render 
@@ -132,14 +146,14 @@ function renderDice() {
             if (isFirstRoll) return; // Cannot hold before the game starts
             
             // Check legality of the click before allowing the hold
-            if (!die.isHeld) {
-                const validation = game.diceSet.canHold(die);
+            if (!die.getIsHeld()) {
+                const validation = game.getDiceSet().canHold(die);
                 if (validation !== true) {
                     showMessage(validation);
                     return;
                 }
             } else {
-                const validation = game.diceSet.canUnhold(die);
+                const validation = game.getDiceSet().canUnhold(die);
                 if (validation !== true) {
                     showMessage(validation);
                     return;
@@ -151,18 +165,29 @@ function renderDice() {
             //game.diceSet.evaluateDice(); // Check if this new hold triggers a qualifier!
             
             // Re-render the UI loop to reflect the new state
-            renderDice();
+
             updateUI();
-        });
-        
+            renderDice();
+                    
         // Apply CSS classes based on the logical outcome of the die or the turn.
-        if (die.isHeld) {
-            dieEl.classList.add('held'); // Green background for a kept die 
-        } else if (game.diceSet.isQualified()) {
-            dieEl.classList.add('cargo'); // Automatically highlight non-held dice as Cargo!
-        } else if (game.hasBusted()) {
-            dieEl.classList.add('failed'); // Red background indicating a busted roll
-        }
+
+        });
+
+        
+
+        if (die.getIsHeld() && !die.getLockedIn()) {
+            console.log(`DieValue: ${die.getValue()} IsTriple: ${die.getIsTriple()}`)
+            dieEl.classList.add('cargo');
+        } 
+        else if (die.getLockedIn()) {
+            dieEl.classList.add('held');
+        } 
+
+        else if (game.getTurn() != 0 &&die.getIsTriple() && !die.getIsHeld() && !die.getIsHeld()) {
+           dieEl.classList.add('failed');   
+        } 
+
+ 
         
         // Inject the appropriate HTML entity to graphically render the die face.
         if (isFirstRoll) {
@@ -170,11 +195,23 @@ function renderDice() {
         } else {
             // Since our random dice rolls yield 1 through 6, we can use that exact value 
             // as the index to grab the corresponding HTML entity from our array.
-            dieEl.innerHTML = diceEntities[die.value];
+            dieEl.innerHTML = diceEntities[die.getValue()];
         }
         
         diceContainer.appendChild(dieEl);
     }
+
+}
+
+function updateDice(){
+
+    let die = null
+    for(let i = 0; i > game.getDiceSet().getDice().length; i ++){
+        die = document.getElementById('die'+i)
+        die.click()
+
+    }
+
 }
 
 function showScoreboard() {
@@ -182,9 +219,9 @@ function showScoreboard() {
     
     scoreList.innerHTML = '';
     
-    for (const player of game.players) {
+    for (const player of game.getPlayers()) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${player.name}</span> <strong>${player.score}</strong>`;
+        li.innerHTML = `<span>${player.getName()}</span> <strong>${player.getScore()}</strong>`;
         scoreList.appendChild(li);
     }
 
@@ -192,7 +229,7 @@ function showScoreboard() {
     if (winners.length > 1) {
         winnerDisplay.textContent = "It's a Tie!";
     } else {
-        winnerDisplay.textContent = `${winners[0].name} Wins!`;
+        winnerDisplay.textContent = `${winners[0].getName()} Wins!`;
     }
 }
 

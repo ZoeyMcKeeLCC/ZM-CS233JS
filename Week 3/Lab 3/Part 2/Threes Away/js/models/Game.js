@@ -5,6 +5,7 @@ export default class Game{
 
     #players
     #currentPlayerIndex
+    #currentPlayer
     #diceSet
     #isGameOver
     #turn
@@ -26,6 +27,7 @@ export default class Game{
     //Getters
     getPlayers(){ return this.#players }
     getCurrentPlayerIndex(){ return this.#currentPlayerIndex }
+    getCurrentPlayer(){  return this.#currentPlayer }
     getTurn(){ return this.#turn }
     getDiceSet(){ return this.#diceSet }
     getIsGameOver(){ return this.#isGameOver }
@@ -33,6 +35,7 @@ export default class Game{
     //Setters
     setPlayers(input){  this.#players = input }
     setCurrentPlayerIndex(input){  this.#currentPlayerIndex = input }
+    setCurrentPlayer(input){  this.#currentPlayer = input }
     setTurn(input){  this.#turn = input }
     setDiceSet(input){  this.#diceSet = input }
     setIsGameOver(input){  this.#isGameOver = input }
@@ -49,6 +52,7 @@ export default class Game{
     this.setCurrentPlayerIndex(0);
     this.setIsGameOver(false);
     this.resetTurnState(); 
+    this.setCurrentPlayer(this.getPlayers()[0])
     }
 
     //increments turn by 1
@@ -65,12 +69,12 @@ export default class Game{
     //returns the current player
     getCurrentPlayer(){
 
-        return this.getPlayers()[this.currentPlayerIndex];
+        return this.getPlayers()[this.getCurrentPlayerIndex()];
 
     }
 
         isTurnOver() {
-        return this.diceSet.getAllHeld === 5;
+        return this.getDiceSet().areAllHeld() === 5;
     }
 
     //Rolls all dice in dice list if turn is not over
@@ -98,9 +102,10 @@ export default class Game{
     }
 
     getWinners() {
+        console.log(`isGameOver: ${this.getIsGameOver()}`)
         if (!this.getIsGameOver()) return [];
         
-        let maxScore = -1;
+        let maxScore = 100;
         let winners = [];
 
         // Loop through all players to find the highest score. 
