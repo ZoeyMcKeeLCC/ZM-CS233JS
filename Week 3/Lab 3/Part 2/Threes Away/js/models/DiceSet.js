@@ -68,16 +68,10 @@ export class DiceSet{
         this.setTriples()
         let buffer= false
         for(const die of this.getDice()){
-
             if(die.getIsTriple() === true){
-                //console.log(`Value: ${die.getValue()} Triple detected!!!`)
+                console.log(`Value: ${die.getValue()} Triple detected!!!`)
                 buffer = true; 
             }
-            else{ 
-                //console.log(`Value: ${die.getValue()} Triple not detected.`)
-                buffer =  false; 
-            }
-
         }
 
         return buffer

@@ -19,12 +19,14 @@ export default class Game{
     #diceSet
     #isGameOver
     #turn
+    #lastHeld
 
     constructor() {
     this.#players = [];
     this.#currentPlayerIndex = 0;
 
     this.#turn = 0;
+    this.#lastHeld = 0;
 
     this.#diceSet = new DiceSet();
 
@@ -41,6 +43,7 @@ export default class Game{
     getTurn(){ return this.#turn }
     getDiceSet(){ return this.#diceSet }
     getIsGameOver(){ return this.#isGameOver }
+    getLastHeld(){ return this.#lastHeld }
 
     //Setters
     setPlayers(input){  this.#players = input }
@@ -49,6 +52,7 @@ export default class Game{
     setTurn(input){  this.#turn = input }
     setDiceSet(input){  this.#diceSet = input }
     setIsGameOver(input){  this.#isGameOver = input }
+    setLastHeld(input){  this.#lastHeld = input }
 
 
     //Starts new game
@@ -72,6 +76,7 @@ export default class Game{
 
     //resets turn counter and dice set to start next turn
     resetTurnState() {
+        this.#lastHeld = 0;
         this.setTurn(0);
         this.getDiceSet().reset();
     }

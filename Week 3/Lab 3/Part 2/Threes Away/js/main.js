@@ -69,7 +69,8 @@ function handleStartGame() {
 
 function handleRollClick() {
     updateUI();
-    if(game.getTurn() <= game.getDiceSet().getHeldCount()){
+    if(game.getDiceSet().getHeldCount() > game.getLastHeld() || game.getTurn() == 0){
+    game.setLastHeld(game.getDiceSet().getHeldCount())
     game.rollDice();
     renderDice();
     updateUI();
