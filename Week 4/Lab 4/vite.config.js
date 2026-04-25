@@ -1,10 +1,21 @@
 import { defineConfig } from 'vite';
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vite'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 
 export default defineConfig({
-  // Use relative asset URLs so dist works from subfolders and static file servers.
-  base: './',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+  server: {
+    open: true,
+  },
   build: {
-    // Emit source maps so the built app can be debugged in the browser.
     sourcemap: true,
   },
-});
+})

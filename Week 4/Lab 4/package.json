@@ -5,12 +5,12 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "grocerylist.js",
+  "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "lit-html": "^3.3.2",
-    "vite": "^8.0.9"
+    "vite": "^8.0.10"
   }
 }
