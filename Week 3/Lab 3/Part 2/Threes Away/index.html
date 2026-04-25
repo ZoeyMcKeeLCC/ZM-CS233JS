@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+ <!-- Written by Brian Bird, 4/10/2026 with AI assistance from Gemini 3.1 in Antigravity. -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple Trouble!</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>Triple Trouble!</h1>
+            <p>Roll the dice to get the lowest score possible!</p>
+        </header>
+
+        <main>
+            <!-- Setup Screen -->
+            <section id="setup-screen" class="active">
+                <h2>Game Setup</h2>
+                <div class="rules-box">
+                    <h3>How to Play:</h3>
+                    <ul>
+                        <li>Roll all non-held in dice every round.</li>
+                        <li>All dice are worth their face value <Strong>except 3's are worth 0.</Strong></li>
+                        <li>Once a dice has been held it <strong>cannot be unheld</strong>.</li>
+                        <li>Having 3 die with the <strong>same value</strong> adds <strong>10</strong> to your score.</li>
+                        <li>You must hold at least <strong>one more die</strong> per turn</li>
+                        <li>The player with the <strong>lowest score</strong> wins!</li>
+                    </ul>
+                </div>
+                <div class="player-inputs">
+                    <label>Player 1 Name <input type="text" id="player1-name" placeholder="Player 1"></label>
+                    <label>Player 2 Name <input type="text" id="player2-name" placeholder="Player 2"></label>
+                </div>
+                <button id="start-game-btn">Start Game</button>
+            </section>
+
+            <!-- Game Screen -->
+            <section id="game-screen" class="hidden">
+                <div id="game-status">
+                    <h2 id="current-player-display">Player's Turn</h2>
+                    <p class="instruction-text">Click on the dice you want to hold between rolls!</p>
+                    <p id="message-display" class="message-display"></p>
+                </div>
+
+                <div id="dice-container" class="dice-container">
+                    <!-- Dice DOM elements will be mapped here -->
+                </div>
+
+                <div class="controls">
+                    <button id="roll-btn">Roll Dice (3 left)</button>
+                    <button id="next-turn-btn" class="hidden">End Turn</button>
+                </div>
+            </section>
+
+            <!-- Scoreboard Screen -->
+            <section id="scoreboard-screen" class="hidden">
+                <h2>Game Over!</h2>
+                <h3 id="winner-display"></h3>
+                <ul id="score-list"></ul>
+                <button id="new-game-btn">Play Again</button>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
